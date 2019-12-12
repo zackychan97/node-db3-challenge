@@ -4,6 +4,18 @@ const Schemes = require('./scheme-model.js');
 
 const router = express.Router();
 
+function schemePostChecker(req, res, next){
+  if (Object.keys(req.body).length === 0){
+    res.status(400).json({ message: "We need scheme data from you" })
+  } else {
+    if (!req.body.scheme_name) {
+      res.status(400).json({ message: "Need scheme_name" })
+    } else {
+      next();
+    }
+  }
+}
+
 router.get('/', (req, res) => {
   Schemes.find()
   .then(schemes => {
@@ -78,7 +90,7 @@ router.post('/:id/steps', (req, res) => {
   });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', schemePostChecker, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
