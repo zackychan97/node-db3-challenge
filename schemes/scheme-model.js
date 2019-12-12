@@ -1,4 +1,5 @@
 // write helpers
+const db = require('../data/db-config.js');
 
 module.exports = {
     find, // line 12
@@ -31,7 +32,7 @@ function findSteps(id){
             "instructions"
         )
         .from("steps")
-        .jon("schemes", "steps.scheme_id", "schemes.id")
+        .join("schemes", "steps.scheme_id", "schemes.id")
         .where({ scheme_id: id })
         .orderBy("step_number")
 }
@@ -43,15 +44,21 @@ function add(schemeData){
         .then(ids => {
             const [id] = ids;
 
-            return findById
+            return findById(id)
         })
 }
 
 // function update
-function update(changes, id){
-    return db('schemes')
-        .where({ id })
-        .update(changes, "*")
+// function update(changes, id){
+//     return db('schemes')
+//         .where({ id })
+//         .update(changes, "*")
+// }
+
+function update(changes, id) {
+	return db('schemes')
+		.where({ id })
+		.update(changes);
 }
 
 // function remove
